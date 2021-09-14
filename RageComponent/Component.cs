@@ -5,12 +5,17 @@ namespace RageComponent
     /// <summary>
     /// Component that could be attached to any entity.
     /// </summary>
-    public abstract class Component
+    public abstract class Component<T>
     {
         /// <summary>
         /// <see cref="GTA.Entity"/> this <see cref="Component"/> belongs to.
         /// </summary>
-        public abstract Entity Entity { get; set; }
+        public virtual Entity Entity { get; set; }
+
+        /// <summary>
+        /// Class you can access from component.
+        /// </summary>
+        public T Controller { get; set; }
 
         /// <summary>
         /// Called when component begins to exist.
@@ -29,7 +34,7 @@ namespace RageComponent
         }
 
         /// <summary>
-        /// Called when entity is destroyed.
+        /// Called when entity is destroyed or on script abort.
         /// </summary>
         public virtual void Destroy()
         {

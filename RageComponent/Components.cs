@@ -1,31 +1,51 @@
 ﻿using FusionLibrary.Extensions;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace RageComponent
 {
     /// <summary>
     /// Component functions.
     /// </summary>
-    public class Components
+    public class Components<T>
     {
         /// <summary>
         /// All created components.
         /// </summary>
-        internal readonly static List<Component> AllComponents;
+        private readonly static List<Component<T>> AllComponents = new List<Component<T>>();
 
         /// <summary>
-        /// Registers new component.
+        /// Registers all components of given object.
         /// </summary>
-        /// <param name="component">Component to register.</param>
-        public static void RegisterComponent(Component component)
+        public void RegisterComponents(Object obj)
         {
-            AllComponents.Add(component);
+            Utils.ProcessAllClassFieldsByType<Component<T>>(obj, component =>
+            {
+                var componentValue = (Component<T>)Activator.CreateInstance(typeof(Component<T>));
+                component.SetValue(obj, componentValue);
+
+                AllComponents.Add(componentValue);
+            });
+
+            OnInit();
+        }
+
+        /// <summary>
+        /// Call it on script abort.
+        /// </summary>
+        public void OnAbort()
+        {
+            for (int i = 0; i < AllComponents.Count; i++)
+            {
+                AllComponents[i].Destroy();
+            }
         }
 
         /// <summary>
         /// Call it on first tick.
         /// </summary>
-        internal static void OnInit()
+        public void OnInit()
         {
             for(int i = 0; i < AllComponents.Count; i++)
             {
@@ -36,7 +56,7 @@ namespace RageComponent
         /// <summary>
         /// Call it every frame.
         /// </summary>
-        internal static void OnTick()
+        public void OnTick()
         {
             // Process all components
             for(int i = 0; i < AllComponents.Count; i++)

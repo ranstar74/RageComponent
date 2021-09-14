@@ -10,18 +10,17 @@ namespace RageComponent
         internal Main()
         {
             Tick += OnTick;
+            Aborted += OnAbort;
+        }
+
+        private void OnAbort(object sender, EventArgs e)
+        {
+
         }
 
         private void OnTick(object sender, EventArgs e)
         {
-            // Initialize all components on first frame
-            if(_firstTick)
-            {
-                Components.OnInit();
 
-                _firstTick = false;
-            }
-            Components.OnTick();
         }
     }
 }
