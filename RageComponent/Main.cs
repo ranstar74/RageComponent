@@ -3,24 +3,21 @@ using System;
 
 namespace RageComponent
 {
-    internal class Main : Script
+    public class Main : Script
     {
-        private bool _firstTick = true;
+        /// <summary>
+        /// Invokes every tick.
+        /// </summary>
+        public static Action OnTick { get; set; }
 
-        internal Main()
+        public Main()
         {
-            Tick += OnTick;
-            Aborted += OnAbort;
+            Tick += MainOnTick;
         }
 
-        private void OnAbort(object sender, EventArgs e)
+        private void MainOnTick(object sender, System.EventArgs e)
         {
-
-        }
-
-        private void OnTick(object sender, EventArgs e)
-        {
-
+            OnTick?.Invoke();
         }
     }
 }

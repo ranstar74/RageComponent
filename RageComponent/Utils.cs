@@ -6,7 +6,7 @@ namespace RageComponent
     /// <summary>
     /// Various help functions.
     /// </summary>
-    public class Utils
+    internal class Utils
     {
         /// <summary>
         /// Executes action for all fields of given type.
@@ -14,7 +14,7 @@ namespace RageComponent
         /// <typeparam name="T">Type of field.</typeparam>
         /// <param name="obj">Class object.</param>
         /// <param name="action">Action to execute.</param>
-        public static void ProcessAllClassFieldsByType<T>(object obj, Action<FieldInfo> action)
+        internal static void ProcessAllClassFieldsByBaseType<T>(object obj, Action<FieldInfo> action)
         {
             var fields = obj.GetType().GetFields();
 
@@ -23,11 +23,31 @@ namespace RageComponent
             {
                 var field = fields[i];
 
-                if (field.FieldType.BaseType == typeof(T) || field.FieldType == typeof(T))
+                if (field.FieldType.BaseType == typeof(T))
                 {
                     action(field);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets property value of given object.
+        /// </summary>
+        /// <param name="obj">Object to look for value in.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>Value of property if found.</returns>
+        /// <exception cref="ArgumentException">If property not found.</exception>
+        internal static object GetClassPropertyValueByName(object obj, string propertyName)
+        {
+            var fields = obj.GetType().GetFields();
+            for (int i = 0; i < fields.Length; i++)
+            {
+                var field = fields[i];
+
+                if (field.Name == propertyName)
+                    return field.GetValue(obj);
+            }
+            throw new ArgumentException($"Property {propertyName} not found!");
         }
     }
 }

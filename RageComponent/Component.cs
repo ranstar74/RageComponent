@@ -5,7 +5,7 @@ namespace RageComponent
     /// <summary>
     /// Component that could be attached to any entity.
     /// </summary>
-    public abstract class Component<T>
+    public class Component<T>
     {
         /// <summary>
         /// <see cref="GTA.Entity"/> this <see cref="Component"/> belongs to.
@@ -15,7 +15,7 @@ namespace RageComponent
         /// <summary>
         /// Class you can access from component.
         /// </summary>
-        public T Controller { get; set; }
+        public T Base { get; set; }
 
         /// <summary>
         /// Called when component begins to exist.

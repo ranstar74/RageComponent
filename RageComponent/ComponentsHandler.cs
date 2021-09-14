@@ -1,4 +1,5 @@
 ﻿using FusionLibrary.Extensions;
+using GTA;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,9 +7,9 @@ using System.Reflection;
 namespace RageComponent
 {
     /// <summary>
-    /// Component functions.
+    /// Handles components.
     /// </summary>
-    public class Components<T>
+    public class ComponentsHandler<T>
     {
         /// <summary>
         /// All created components.
@@ -20,15 +21,42 @@ namespace RageComponent
         /// </summary>
         public void RegisterComponents(Object obj)
         {
-            Utils.ProcessAllClassFieldsByType<Component<T>>(obj, component =>
+            Utils.ProcessAllClassFieldsByBaseType<Component<T>>(obj, component =>
             {
-                var componentValue = (Component<T>)Activator.CreateInstance(typeof(Component<T>));
+                var componentValue = (dynamic) Activator.CreateInstance(component.FieldType);
+
+                // Check if entity attribute is defined and if not look for property value in class and assign it
+                var entityAttribute = component.GetCustomAttribute(typeof(EntityAttribute)) as EntityAttribute;
+                if (entityAttribute != null)
+                    componentValue.Entity = (Entity)Utils.GetClassPropertyValueByName(obj, entityAttribute.EntityProperty);
+
+                componentValue.Base = (T)obj;
                 component.SetValue(obj, componentValue);
 
                 AllComponents.Add(componentValue);
             });
 
             OnInit();
+        }
+
+        /// <summary>
+        /// Constructs new instance of <see cref="ComponentsHandler{T}"/>.
+        /// </summary>
+        private ComponentsHandler()
+        {
+
+        }
+
+        /// <summary>
+        /// Registers new components handler.
+        /// </summary>
+        /// <returns>New instance of <see cref="Component"/></returns>
+        public static ComponentsHandler<T> RegisterComponentHandler()
+        {
+            var componentsHandler = new ComponentsHandler<T>();
+            Main.OnTick += componentsHandler.OnTick;
+
+            return componentsHandler;
         }
 
         /// <summary>

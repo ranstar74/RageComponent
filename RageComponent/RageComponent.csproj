@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\RageComponent.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,7 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component.cs" />
-    <Compile Include="Components.cs" />
+    <Compile Include="ComponentsHandler.cs" />
+    <Compile Include="EntityAttribute.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
@@ -67,6 +69,7 @@
 			)
 			copy "$(TargetPath)" "%25GTAPath%25\scripts\$(TargetFileName)"
 			copy "$(TargetDir)\$(TargetName).pdb" "%25GTAPath%25\scripts\$(TargetName).pdb"
+                                                       copy "$(TargetDir)\$(TargetName).xml" "%25GTAPath%25\scripts\$(TargetName).xml"
 			)
 		</PostBuildEvent>
   </PropertyGroup>
