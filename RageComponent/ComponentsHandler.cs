@@ -90,14 +90,6 @@ namespace RageComponent
             for(int i = 0; i < AllComponents.Count; i++)
             {
                 var component = AllComponents[i];
-
-                // Destroy component if entity no longer exists
-                if (component.Entity.NotNullAndExists())
-                {
-                    component.Destroy();
-                    return;
-                }
-
                 component.OnTick();
             }
         }
