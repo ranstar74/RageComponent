@@ -24,6 +24,11 @@ namespace RageComponent
         private bool _initialized = false;
 
         /// <summary>
+        /// Whether handler is disposed or not.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
+        /// <summary>
         /// Registers all components of given object.
         /// </summary>
         public void RegisterComponents(Object obj)
@@ -112,6 +117,7 @@ namespace RageComponent
         {
             var componentsHandler = new ComponentsHandler<T>();
             Main.OnTick += componentsHandler.OnTick;
+            Main.OnAbort += componentsHandler.OnAbort;
 
             return componentsHandler;
         }
@@ -121,6 +127,12 @@ namespace RageComponent
         /// </summary>
         public void OnAbort()
         {
+            for (int i = 0; i < AllComponents.Count; i++)
+            {
+                AllComponents[i].Destroy();
+            }
+
+            
             for (int i = 0; i < AllHandlerComponentProps.Count; i++)
             {
                 var prop = AllHandlerComponentProps[i];
@@ -128,10 +140,7 @@ namespace RageComponent
                 prop.Dispose();
             }
 
-            for (int i = 0; i < AllComponents.Count; i++)
-            {
-                AllComponents[i].Destroy();
-            }
+            IsDisposed = true;
         }
 
         /// <summary>
@@ -151,6 +160,9 @@ namespace RageComponent
         /// </summary>
         public void OnTick()
         {
+            if (IsDisposed)
+                return;
+
             if (!_initialized)
                 return;
 
