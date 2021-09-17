@@ -8,7 +8,7 @@ namespace RageComponent
     public class Component<T>
     {
         /// <summary>
-        /// <see cref="GTA.Entity"/> this <see cref="Component"/> belongs to.
+        /// <see cref="GTA.Entity"/> this Component belongs to.
         /// </summary>
         public virtual Entity Entity { get; set; }
 
@@ -16,6 +16,11 @@ namespace RageComponent
         /// Class you can access from component.
         /// </summary>
         public T Base { get; set; }
+
+        /// <summary>
+        /// If True - OnTick function will be called, otherwise False.
+        /// </summary>
+        public bool IsEnabled { get; set; } = false;
 
         /// <summary>
         /// Called when component begins to exist.

@@ -1,4 +1,4 @@
-﻿using FusionLibrary.Extensions;
+﻿using FusionLibrary;
 using GTA;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,14 @@ namespace RageComponent
         /// <summary>
         /// All created components.
         /// </summary>
-        private readonly static List<Component<T>> AllComponents = new List<Component<T>>();
+        private readonly List<Component<T>> AllComponents = new List<Component<T>>();
+
+        /// <summary>
+        /// All props of components that belongs to this handler.
+        /// </summary>
+        private readonly List<AnimateProp> AllHandlerComponentProps = new List<AnimateProp>();
+
+        private bool _initialized = false;
 
         /// <summary>
         /// Registers all components of given object.
@@ -28,7 +35,15 @@ namespace RageComponent
                 // Check if entity attribute is defined and if not look for property value in class and assign it
                 var entityAttribute = component.GetCustomAttribute(typeof(EntityAttribute)) as EntityAttribute;
                 if (entityAttribute != null)
-                    componentValue.Entity = (Entity)Utils.GetClassPropertyValueByName(obj, entityAttribute.EntityProperty);
+                {
+                    var entity = (Entity)Utils.GetClassFieldValueByName(obj, entityAttribute.EntityProperty);
+
+                    if(entity == null)
+                        throw new NullReferenceException(
+                            $"Entity {entityAttribute.EntityProperty} of {nameof(component)} was not found.");
+
+                    componentValue.Entity = entity;
+                }
 
                 componentValue.Base = (T)obj;
                 component.SetValue(obj, componentValue);
@@ -37,6 +52,48 @@ namespace RageComponent
             });
 
             OnInit();
+
+            // Add all props to prop component
+            for (int i = 0; i < AllComponents.Count; i++)
+            {
+                var component = AllComponents[i];
+
+                // AnimateProp
+                AllHandlerComponentProps.AddRange(Utils.GetAllFieldValues<AnimateProp>(component));
+
+                // AnimatePropsHandler
+                var animatePropHandlers = Utils.GetAllFieldValues<AnimatePropsHandler>(component);
+                for (int k = 0; k < animatePropHandlers.Count; k++)
+                {
+                    var handler = animatePropHandlers[k];
+                    AllHandlerComponentProps.AddRange(handler.Props);
+                }
+
+                // List<AnimateProp>
+                var animatePropList = Utils.GetAllFieldValues<List<AnimateProp>>(component);
+                for (int k = 0; k < animatePropList.Count; k++)
+                {
+                    var propList = animatePropList[i];
+                    AllHandlerComponentProps.AddRange(propList);
+                }
+            }
+
+            for (int i = 0; i < AllHandlerComponentProps.Count; i++)
+            {
+                var prop = AllHandlerComponentProps[i];
+
+                // Sometimes prop could be spawned in constructor so
+                // we don't want to spawn duplicate
+                if (!prop.IsSpawned)
+                    prop.SpawnProp();
+            }
+
+            for (int i = 0; i < AllComponents.Count; i++)
+            {
+                var component = AllComponents[i];
+                component.IsEnabled = true;
+            }
+            _initialized = true;
         }
 
         /// <summary>
@@ -50,7 +107,7 @@ namespace RageComponent
         /// <summary>
         /// Registers new components handler.
         /// </summary>
-        /// <returns>New instance of <see cref="Component"/></returns>
+        /// <returns>New instance of <see cref="ComponentsHandler{T}"/></returns>
         public static ComponentsHandler<T> RegisterComponentHandler()
         {
             var componentsHandler = new ComponentsHandler<T>();
@@ -64,6 +121,13 @@ namespace RageComponent
         /// </summary>
         public void OnAbort()
         {
+            for (int i = 0; i < AllHandlerComponentProps.Count; i++)
+            {
+                var prop = AllHandlerComponentProps[i];
+
+                prop.Dispose();
+            }
+
             for (int i = 0; i < AllComponents.Count; i++)
             {
                 AllComponents[i].Destroy();
@@ -75,9 +139,10 @@ namespace RageComponent
         /// </summary>
         public void OnInit()
         {
-            for(int i = 0; i < AllComponents.Count; i++)
+            for (int i = 0; i < AllComponents.Count; i++)
             {
-                AllComponents[i].Start();
+                var component = AllComponents[i];
+                component.Start();
             }
         }
 
@@ -86,11 +151,16 @@ namespace RageComponent
         /// </summary>
         public void OnTick()
         {
+            if (!_initialized)
+                return;
+
             // Process all components
-            for(int i = 0; i < AllComponents.Count; i++)
+            for (int i = 0; i < AllComponents.Count; i++)
             {
                 var component = AllComponents[i];
-                component.OnTick();
+
+                if(component.IsEnabled)
+                    component.OnTick();
             }
         }
     }
