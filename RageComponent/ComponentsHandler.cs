@@ -19,7 +19,7 @@ namespace RageComponent
         /// <summary>
         /// All props of components that belongs to this handler.
         /// </summary>
-        private readonly List<AnimateProp> AllHandlerComponentProps = new List<AnimateProp>();
+        public readonly List<AnimateProp> AllHandlerComponentProps = new List<AnimateProp>();
 
         private bool _initialized = false;
 
@@ -80,6 +80,14 @@ namespace RageComponent
                 {
                     var propList = animatePropList[i];
                     AllHandlerComponentProps.AddRange(propList);
+                }
+
+                // InteractiveProp
+                var interactiveProps = Utils.GetAllFieldValues<InteractiveProp>(component);
+                for (int k = 0; k < interactiveProps.Count; k++)
+                {
+                    var prop = interactiveProps[k];
+                    AllHandlerComponentProps.Add(prop.AnimateProp);
                 }
             }
 
