@@ -5,6 +5,8 @@ namespace RageComponent
 {
     public class Main : Script
     {
+        private Version Version => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Invokes every tick.
         /// </summary>
@@ -17,6 +19,9 @@ namespace RageComponent
 
         public Main()
         {
+            DateTime buildDate = new DateTime(2000, 1, 1).AddDays(Version.Build).AddSeconds(Version.Revision * 2);
+            System.IO.File.AppendAllText($"./ScriptHookVDotNet.log", $"RageComponent - {Version} ({buildDate})" + Environment.NewLine);
+            
             Tick += MainOnTick;
             Aborted += MainOnAbort;
         }
