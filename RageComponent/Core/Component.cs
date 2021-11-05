@@ -1,24 +1,19 @@
-﻿using GTA;
+﻿using System;
 
 namespace RageComponent
 {
     /// <summary>
     /// Component that could be attached to any entity.
     /// </summary>
-    public class Component<T>
+    public class Component<T> : IDisposable where T : class
     {
         /// <summary>
-        /// <see cref="GTA.Entity"/> this Component belongs to.
+        /// Parent of the <see cref="Component{Parent}"/>.
         /// </summary>
-        public virtual Entity Entity { get; set; }
+        public T Parent { get; set; }
 
         /// <summary>
-        /// Class you can access from component.
-        /// </summary>
-        public T Base { get; set; }
-
-        /// <summary>
-        /// If True - OnTick function will be called, otherwise False.
+        /// If Set To False, <see cref="OnTick"/> will be skipped.
         /// </summary>
         public bool IsEnabled { get; set; } = false;
 
@@ -39,11 +34,19 @@ namespace RageComponent
         }
 
         /// <summary>
-        /// Called when entity is destroyed or on script abort.
+        /// Called on script abort.
         /// </summary>
         public virtual void Destroy()
         {
 
+        }
+
+        /// <summary>
+        /// Invokes <see cref="Destroy"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            Destroy();
         }
     }
 }
