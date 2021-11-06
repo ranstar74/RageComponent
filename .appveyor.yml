@@ -30,7 +30,7 @@ deploy:
   release: v$(APPVEYOR_BUILD_VERSION)
   provider: GitHub
   auth_token:
-    secure: "lpAeUIGVgeF9x1BpuRKQC0IYdOlQNvsaFuchkuSGNMnXZajQxx3s/jYzTi5lW1ejG4"
+    secure: lpAeUIGVgeF9x1BpuRKQC0IYdOlQNvsaFuchkuSGNMnXZajQxx3s/jYzTi5lW1ej
   artifact: /.*\.7z/
   draft: false
   prerelease: false
