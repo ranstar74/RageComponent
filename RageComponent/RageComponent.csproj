@@ -59,7 +59,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".appveyor.yml" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\ComponentsHandler.cs" />
     <Compile Include="Main.cs" />

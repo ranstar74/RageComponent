@@ -24,3 +24,16 @@ install:
 # Build the solution with the same name as the AppVeyor project
 build_script:
   - msbuild %APPVEYOR_PROJECT_NAME%.sln /t:Build /p:Configuration=Release
+
+# If this is a tag, deploy the 7zip file(s) to GitHub Releases
+deploy:
+  release: v$(APPVEYOR_BUILD_VERSION)
+  provider: GitHub
+  auth_token:
+    secure: "lpAeUIGVgeF9x1BpuRKQC0IYdOlQNvsaFuchkuSGNMnXZajQxx3s/jYzTi5lW1ejG4"
+  artifact: /.*\.7z/
+  draft: false
+  prerelease: false
+  on:
+    branch: master
+    appveyor_repo_tag: true
