@@ -60,7 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Component.cs" />
-    <Compile Include="Core\ComponentsHandler.cs" />
+    <Compile Include="Core\ComponentCollection.cs" />
+    <Compile Include="Core\ComponentObjectCollection.cs" />
+    <Compile Include="Core\IComponentObject.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

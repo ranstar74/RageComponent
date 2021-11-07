@@ -1,19 +1,35 @@
-﻿using System;
+﻿using RageComponent.Core;
+using System;
 
 namespace RageComponent
 {
     /// <summary>
-    /// Component that could be attached to any entity.
+    /// Defines a component that does some specific functionality.
     /// </summary>
-    public class Component<T> : IDisposable where T : class
+    public abstract class Component : IDisposable
     {
-        /// <summary>
-        /// Parent of the <see cref="Component{Parent}"/>.
-        /// </summary>
-        public T Parent { get; set; }
+        private readonly ComponentCollection components;
 
         /// <summary>
-        /// If Set To False, <see cref="OnTick"/> will be skipped.
+        /// Gets component parent.
+        /// </summary>
+        /// <returns>A parent of the <see cref="IComponentObject"/></returns>
+        public T GetParent<T>() where T : class
+        {
+            return (T) components.GameObject;
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="Component"/>.
+        /// </summary>
+        /// <param name="components">A collection of components the <see cref="Component"/> created in.</param>
+        public Component(ComponentCollection components)
+        {
+            this.components = components;
+        }
+
+        /// <summary>
+        /// If Set To False, <see cref="Update"/> will be skipped.
         /// </summary>
         public bool IsEnabled { get; set; } = false;
 
@@ -28,25 +44,17 @@ namespace RageComponent
         /// <summary>
         /// Called every frame.
         /// </summary>
-        public virtual void OnTick()
+        public virtual void Update()
         {
-
+            
         }
 
         /// <summary>
         /// Called on script abort.
         /// </summary>
-        public virtual void Destroy()
+        public virtual void Dispose()
         {
 
-        }
-
-        /// <summary>
-        /// Invokes <see cref="Destroy"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            Destroy();
         }
     }
 }
