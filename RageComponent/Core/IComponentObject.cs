@@ -15,5 +15,15 @@
         /// Initializes <see cref="IComponentObject"/> components.
         /// </summary>
         void InitializeComponents();
+
+        /// <summary>
+        /// Handle of the <see cref="IComponentObject"/>.
+        /// </summary>
+        int ComponentHandle { get; }
+
+        /// <summary>
+        /// Sets handle of the <see cref="IComponentObject"/>.
+        /// </summary>
+        void SetComponentHandle(int componentHandle);
     }
 }
