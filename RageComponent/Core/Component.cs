@@ -8,16 +8,17 @@ namespace RageComponent
     /// </summary>
     public abstract class Component : IDisposable
     {
-        private readonly ComponentCollection components;
+        /// <summary>
+        /// Component collection the <see cref="Component"/> created in.
+        /// </summary>
+        public ComponentCollection Components => components;
 
         /// <summary>
-        /// Gets component parent.
+        /// If Set To False, <see cref="Update"/> will be skipped.
         /// </summary>
-        /// <returns>A parent of the <see cref="IComponentObject"/></returns>
-        public T GetParent<T>() where T : class
-        {
-            return (T) components.GameObject;
-        }
+        public bool IsEnabled { get; set; } = false;
+
+        private readonly ComponentCollection components;
 
         /// <summary>
         /// Creates a new instance of <see cref="Component"/>.
@@ -29,9 +30,13 @@ namespace RageComponent
         }
 
         /// <summary>
-        /// If Set To False, <see cref="Update"/> will be skipped.
+        /// Gets component parent.
         /// </summary>
-        public bool IsEnabled { get; set; } = false;
+        /// <returns>A parent of the <see cref="IComponentObject"/></returns>
+        public T GetParent<T>() where T : class
+        {
+            return (T)components.GameObject;
+        }
 
         /// <summary>
         /// Called when component begins to exist.
