@@ -1,7 +1,7 @@
 Rage Component .NET
 ============================
 
-This is an implementation of the Component pattern for GTA V.
+This is an implementation of the Unity Component System for GTA V.
 
 ## Requirements
 
