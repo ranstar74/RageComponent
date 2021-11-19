@@ -16,7 +16,7 @@ namespace RageComponent
         /// <summary>
         /// If Set To False, <see cref="Update"/> will be skipped.
         /// </summary>
-        public bool IsEnabled { get; set; } = false;
+        public bool IsEnabled { get; set; } = true;
 
         private readonly ComponentCollection components;
 
