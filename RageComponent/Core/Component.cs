@@ -17,7 +17,7 @@ namespace RageComponent
         /// <summary>
         /// Shortcut for to <see cref="Game.Player.Character"/>.
         /// </summary>
-        public Ped Player => Game.Player.Character;
+        public Ped GPlayer => Game.Player.Character;
 
         /// <summary>
         /// If Set To False, <see cref="Update"/> will be skipped.
