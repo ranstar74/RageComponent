@@ -1,4 +1,5 @@
-﻿using RageComponent.Core;
+﻿using GTA;
+using RageComponent.Core;
 using System;
 
 namespace RageComponent
@@ -12,6 +13,11 @@ namespace RageComponent
         /// Component collection the <see cref="Component"/> created in.
         /// </summary>
         public ComponentCollection Components => components;
+
+        /// <summary>
+        /// Shortcut for to <see cref="Game.Player.Character"/>.
+        /// </summary>
+        public Ped Player => Game.Player.Character;
 
         /// <summary>
         /// If Set To False, <see cref="Update"/> will be skipped.
