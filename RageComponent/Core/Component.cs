@@ -24,6 +24,15 @@ namespace RageComponent
         /// </summary>
         public bool IsEnabled { get; set; } = true;
 
+        /// <summary>
+        /// Defines how often update is called.
+        /// </summary>
+        /// <remarks>
+        /// -1 is every tick, 250 is every 250ms
+        /// </remarks>
+        public int UpdateTime { get; set; } = -1;
+
+        internal int NextUpdateTime = 0;
         private readonly ComponentCollection components;
 
         /// <summary>

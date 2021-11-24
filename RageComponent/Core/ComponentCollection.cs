@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -134,7 +135,17 @@ namespace RageComponent.Core
                 var component = components[i];
 
                 if(component.IsEnabled)
-                    component.Update();
+                {
+                    if(Game.GameTime > component.NextUpdateTime)
+                    {
+                        component.Update();
+
+                        if (component.UpdateTime != -1)
+                            component.NextUpdateTime = Game.GameTime + component.UpdateTime;
+                        else
+                            component.NextUpdateTime = 0;
+                    }
+                }
             }
         }
 
