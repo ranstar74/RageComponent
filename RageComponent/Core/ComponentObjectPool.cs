@@ -42,7 +42,7 @@ namespace RageComponent.Core
         /// </remarks>
         /// <param name="index">Index of the element.</param>
         /// <returns>Element at the specified index.</returns>
-        public IComponentObject this[int index] { get => componentObjects[index]; set { } }
+        public IComponentObject this[int index] { get => componentObjects.ElementAt(index).Value; set { } }
 
         /// <summary>
         /// Adds a <see cref="IComponentObject"/> to the collection.
