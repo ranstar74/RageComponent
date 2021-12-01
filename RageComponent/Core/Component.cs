@@ -15,7 +15,7 @@ namespace RageComponent
         public ComponentCollection Components => components;
 
         /// <summary>
-        /// Shortcut for to <see cref="Game.Player.Character"/>.
+        /// Shortcut for to game player.
         /// </summary>
         public Ped GPlayer => Game.Player.Character;
 
@@ -70,9 +70,23 @@ namespace RageComponent
         }
 
         /// <summary>
-        /// Called on script abort.
+        /// Called when <see cref="IComponentObject"/> being disposed.
+        /// <para>
+        /// Dispose component related objects here, for static use <see cref="OnReload"/>.
+        /// </para>
         /// </summary>
         public virtual void Dispose()
+        {
+
+        }
+
+        /// <summary>
+        /// Called on script reload.
+        /// <para>
+        /// Useful for disposing static objects.
+        /// </para>
+        /// </summary>
+        public virtual void Reload()
         {
 
         }

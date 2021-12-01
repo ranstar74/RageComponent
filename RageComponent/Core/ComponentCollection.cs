@@ -159,5 +159,16 @@ namespace RageComponent.Core
                 components[i].Dispose();
             }
         }
+
+        /// <summary>
+        /// Calls <see cref="Component.Reload"/> for every component.
+        /// </summary>
+        public void OnReload()
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].Reload();
+            }
+        }
     }
 }
