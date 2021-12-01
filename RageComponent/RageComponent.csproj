@@ -64,6 +64,7 @@
     <Compile Include="Core\ComponentCollection.cs" />
     <Compile Include="Core\ComponentObjectPool.cs" />
     <Compile Include="Core\IComponentObject.cs" />
+    <Compile Include="Core\Pool.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
