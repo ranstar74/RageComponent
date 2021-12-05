@@ -83,7 +83,7 @@ namespace RageComponent.Core
         /// <summary>
         /// Releases a object back to pool.
         /// </summary>
-        /// <param name="obj">Objec to release.</param>
+        /// <param name="obj">Object to release.</param>
         public void Free(T obj)
         {
             if (IsDisposed)
