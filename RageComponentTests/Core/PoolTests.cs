@@ -7,34 +7,33 @@ namespace RageComponent.Core.Tests
     [TestClass()]
     public class PoolTests
     {
-        private class TestPoolObject
+        private class Foo
         {
             public string Name { get; set; }
         }
 
         [TestMethod]
-        public void Check_Pool_Size_Returns_Value_That_Was_Passed_In_Constructor()
+        public void Size_ReturnsValuePassedInConstructor()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(25, () =>
+            int size = 25;
+            Pool<Foo> pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
 
-            // Act
-            // ...
-
             // Asset
-            Assert.AreEqual(25, pool.Size);
+            Assert.AreEqual(size, pool.Size);
         }
 
         [TestMethod()]
-        public void Check_Object_Get_In_A_Pool_With_No_Free_Objects_Throws_NoFreeObjectsInPoolException()
+        public void Get_FromPoolWithNoFreeObjects_ThrowsNoFreeObjectsInPoolException()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(1, () =>
+            int size = 1;
+            Pool<Foo> pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
 
             // Act
@@ -45,77 +44,80 @@ namespace RageComponent.Core.Tests
         }
 
         [TestMethod]
-        public void Check_Object_Get_In_A_Pool_Retuns_Object()
+        public void Get_ReturnsPoolObject()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(1, () =>
+            int size = 1;
+            Foo result;
+            Pool<Foo> pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
-            object result;
 
             // Act
             result = pool.Get();
 
             // Asset
-            Assert.IsTrue(result is TestPoolObject);
+            Assert.IsTrue(result is Foo);
         }
 
         [TestMethod]
-        public void Check_Pool_UsedObjects_Without_Release()
+        public void UsedObjects_GivesCorrectValueWithOnlyGet()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(10, () =>
-            {
-                return new TestPoolObject();
-            });
+            int size = 10;
             int usedObjects;
+            int expectedUsedObjects = 0;
+            Pool<Foo> pool = new Pool<Foo>(size, () =>
+            {
+                return new Foo();
+            });
 
             // Act
-            List<TestPoolObject> objects = new List<TestPoolObject>();
-
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < size; i++)
             {
-                objects.Add(pool.Get());
+                _ = pool.Get();
             }
             usedObjects = pool.FreeObjects;
 
             // Asset
-            Assert.AreEqual(0, usedObjects);
+            Assert.AreEqual(expectedUsedObjects, usedObjects);
         }
 
         [TestMethod]
-        public void Check_Pool_UsedObjects_With_Release()
+        public void UsedObjects_GivesCorrectValueWithGetAndFree()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(10, () =>
+            int size = 10;
+            int usedObjects;
+            int expectedUserObjects = 10;
+            Pool<Foo> pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
-            int freeObjects;
 
             // Act
-            List<TestPoolObject> objects = new List<TestPoolObject>();
-
-            for (int i = 0; i < 10; i++)
+            List<Foo> objects = new List<Foo>();
+            for (int i = 0; i < size; i++)
             {
                 objects.Add(pool.Get());
             }
             objects.ForEach(x => pool.Free(x));
 
-            freeObjects = pool.FreeObjects;
+            usedObjects = pool.FreeObjects;
 
             // Asset
-            Assert.AreEqual(10, freeObjects);
+            Assert.AreEqual(expectedUserObjects, usedObjects);
         }
 
         [TestMethod]
-        public void Check_Accesing_Disposed_Pool_Throws_ObjectDisposedException()
+        public void AccessingPoolAfterDispose_ThrowsObjectDisposedException()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(1, () =>
+            int size = 1;
+            var pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
 
             // Act
@@ -126,14 +128,16 @@ namespace RageComponent.Core.Tests
         }
 
         [TestMethod]
-        public void Check_Pool_OnDisposed_Being_Called_For_Every_Object()
+        public void OnDisposed_CalledForEveryObject()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(10, () =>
-            {
-                return new TestPoolObject();
-            });
+            int size = 10;
             int onDisposeCount = 0;
+            int onDisposedCountExpected = size;
+            var pool = new Pool<Foo>(size, () =>
+            {
+                return new Foo();
+            });
 
             pool.OnDispose += _ => onDisposeCount++;
 
@@ -141,16 +145,17 @@ namespace RageComponent.Core.Tests
             pool.Dispose();
 
             // Asset
-            Assert.AreEqual(10, onDisposeCount);
+            Assert.AreEqual(onDisposedCountExpected, onDisposeCount);
         }
 
         [TestMethod]
-        public void Check_Pool_IsDisposed_Returns_True_After_Dispose()
+        public void IsDisposed_ReturnsTrueAfterDisposed()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(10, () =>
+            int size = 1;
+            var pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
 
             // Act
@@ -161,19 +166,46 @@ namespace RageComponent.Core.Tests
         }
 
         [TestMethod]
-        public void Check_Not_Disposed_Pool_IsDisposed_Returns_False()
+        public void IsDisposed_ReturnsFalse()
         {
             // Arrange
-            var pool = new Pool<TestPoolObject>(10, () =>
+            int size = 1;
+            var pool = new Pool<Foo>(size, () =>
             {
-                return new TestPoolObject();
+                return new Foo();
             });
-
-            // Act
-            // ...
 
             // Asset
             Assert.IsFalse(pool.IsDisposed);
+        }
+
+        [TestMethod]
+        public void Check_Not_Disposed_Pool_IsDisposed_Returns_False()
+        {
+            // Arrange
+            var pool = new Pool<Foo>(10, () =>
+            {
+                return new Foo();
+            });
+
+            // Asset
+            Assert.IsFalse(pool.IsDisposed);
+        }
+
+        [TestMethod]
+        public void CreatePoolWithWrongSize_ThrowsArgumentException()
+        {
+            // Arrange
+            int size = 0;
+
+            // Act & Asset
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                var pool = new Pool<Foo>(size, () =>
+                {
+                    return new Foo();
+                });
+            }, "Size can't be less than 1.");
         }
     }
 }
