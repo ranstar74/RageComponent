@@ -5,6 +5,11 @@ using System.Linq;
 namespace RageComponent.Core
 {
     /// <summary>
+    /// The exception that is thrown when object is requested from a pool with no free objects.
+    /// </summary>
+    public class NoFreeObjectsInPoolException : Exception { }
+
+    /// <summary>
     /// A pool implementation.
     /// </summary>
     /// <typeparam name="T">Type of the pool object.</typeparam>
@@ -16,10 +21,23 @@ namespace RageComponent.Core
         public int Size => _size;
 
         /// <summary>
+        /// Gets a value indicating how much of pool objects are free / unused.
+        /// </summary>
+        public int FreeObjects => _pool.Count(x => x.Value == false);
+
+        /// <summary>
         /// Invokes on <see cref="Dispose"/> for every pool object.
         /// </summary>
         public Action<T> OnDispose { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this pool is disposed or not.
+        /// </summary>
+        public bool IsDisposed { get; set; } = false;
+
+        /// <summary>
+        /// Dict that contains an object with bool, indicating whether object is used or not.
+        /// </summary>
         private readonly Dictionary<T, bool> _pool = new Dictionary<T, bool>();
         private readonly int _size;
 
@@ -48,7 +66,18 @@ namespace RageComponent.Core
         /// <returns>An pool object if there's any free.</returns>
         public T Get()
         {
-            return _pool.FirstOrDefault(x => x.Value == false).Key;
+            if (IsDisposed)
+                throw new ObjectDisposedException(GetType().FullName);
+
+            T key = _pool.FirstOrDefault(x => x.Value == false).Key;
+            
+            if (key == null)
+                throw new NoFreeObjectsInPoolException();
+
+            // Mark as used object
+            _pool[key] = true;
+
+            return key;
         }
 
         /// <summary>
@@ -57,6 +86,10 @@ namespace RageComponent.Core
         /// <param name="obj">Objec to release.</param>
         public void Free(T obj)
         {
+            if (IsDisposed)
+                throw new ObjectDisposedException(GetType().FullName);
+
+            // Mark as unused object
             _pool[obj] = false;
         }
 
@@ -65,7 +98,14 @@ namespace RageComponent.Core
         /// </summary>
         public void Dispose()
         {
-            _pool.Keys.ToList().ForEach(OnDispose);
+            if(IsDisposed)
+                throw new ObjectDisposedException(GetType().FullName);
+
+            _pool.Keys
+                .ToList()
+                .ForEach(x => OnDispose?.Invoke(x));
+
+            IsDisposed = true;
         }
     }
 }

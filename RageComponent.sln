@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RageComponent", "RageComponent\RageComponent.csproj", "{AB70136A-A9CB-473D-8C2D-3F1BC4F7B4A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RageComponentTests", "RageComponentTests\RageComponentTests.csproj", "{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{AB70136A-A9CB-473D-8C2D-3F1BC4F7B4A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB70136A-A9CB-473D-8C2D-3F1BC4F7B4A1}.Release|x64.ActiveCfg = Release|x64
 		{AB70136A-A9CB-473D-8C2D-3F1BC4F7B4A1}.Release|x64.Build.0 = Release|x64
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Debug|x64.Build.0 = Debug|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Release|x64.ActiveCfg = Release|Any CPU
+		{16BD8FEC-670B-4DD8-8329-CBDDFBD33891}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

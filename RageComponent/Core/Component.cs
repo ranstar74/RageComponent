@@ -72,7 +72,7 @@ namespace RageComponent
         /// <summary>
         /// Called when <see cref="IComponentObject"/> being disposed.
         /// <para>
-        /// Dispose component related objects here, for static use <see cref="OnReload"/>.
+        /// Dispose component related objects here, for static use <see cref="Reload"/>.
         /// </para>
         /// </summary>
         public virtual void Dispose()
