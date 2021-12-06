@@ -58,6 +58,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\ComponentObjectCollectionTests.cs" />
     <Compile Include="Core\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
