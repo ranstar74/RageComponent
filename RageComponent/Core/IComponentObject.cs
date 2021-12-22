@@ -5,11 +5,6 @@ namespace RageComponent.Core
     /// <summary>
     /// Defines a class that contains a <see cref="ComponentCollection"/>.
     /// </summary>
-    /// <remarks>
-    /// Implementation of <see cref="SetComponentHandle(int)"/> and <see cref="InvalidateHandle"/>
-    /// was left on developer because sometimes it requires additional actions, for i.e. 
-    /// writing handle in entity decorator.
-    /// </remarks>
     public interface IComponentObject : IDisposable
     {
         /// <summary>
@@ -19,21 +14,10 @@ namespace RageComponent.Core
         ComponentCollection GetComponents();
 
         /// <summary>
-        /// Handle of the <see cref="IComponentObject"/>.
+        /// Unique identificator of component object.
+        /// Could be handle of entity that component object holds,
+        /// so later you can get the <see cref="IComponentObject"/> by that handle.
         /// </summary>
-        int ComponentHandle { get; }
-
-        /// <summary>
-        /// Sets handle of the <see cref="IComponentObject"/>.
-        /// </summary>
-        void SetComponentHandle(int componentHandle);
-
-        /// <summary>
-        /// Invalidates object handle. Being called on <see cref="ComponentObjectPool"/> dispose.
-        /// </summary>
-        /// <remarks>
-        /// This method must set <see cref="ComponentHandle"/> to -1.
-        /// </remarks>
-        void InvalidateHandle();
+        int Handle { get; }
     }
 }

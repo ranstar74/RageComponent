@@ -9,7 +9,7 @@ namespace RageComponent.Core
     /// Defines a collection of <see cref="Component"/>'s.
     /// </summary>
     /// <remarks>
-    /// Must be used in pair with <see cref="IComponentObject"/> and <see cref="ComponentObjectPool"/>.
+    /// Must be used in pair with <see cref="IComponentObject"/> and <see cref="ComponentObjectCollection"/>.
     /// <para>
     ///  Otherwise <see cref="OnUpdate"/> won't be called.
     ///  </para>
@@ -24,15 +24,6 @@ namespace RageComponent.Core
         /// Made as workaround of Unity's GameObject.
         /// </remarks>  
         public object GameObject => gameObject;
-
-        /// <summary>
-        /// Gets or sets a value indicating if <see cref="OnUpdate"/> will be called or not.
-        /// </summary>
-        /// <remarks>
-        /// Used to disable component collection before object was added to pool
-        /// because some components may access handle.
-        /// </remarks>
-        internal bool IsEnabled { get; set; } = false;
 
         private readonly List<Component> components = new List<Component>();
         private readonly object gameObject;
@@ -127,9 +118,6 @@ namespace RageComponent.Core
         /// </summary>
         public void OnUpdate()
         {
-            if (!IsEnabled)
-                return;
-
             for(int i = 0; i < components.Count; i++)
             {
                 var component = components[i];

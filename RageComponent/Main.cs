@@ -57,18 +57,9 @@ namespace RageComponent
             DateTime buildDate = new DateTime(2000, 1, 1).AddDays(Version.Build).AddSeconds(Version.Revision * 2);
             System.IO.File.AppendAllText($"./ScriptHookVDotNet.log", $"RageComponent - {Version} ({buildDate})" + Environment.NewLine);
             
-            Tick += MainOnTick;
-            Aborted += MainOnAbort;
-        }
-
-        private void MainOnAbort(object sender, EventArgs e)
-        {
-            OnAbort?.Invoke();
-        }
-
-        private void MainOnTick(object sender, System.EventArgs e)
-        {
-            OnTick?.Invoke();
+            Tick += (_, __) => OnTick?.Invoke();
+            Aborted += (_, __) => OnAbort?.Invoke();
         }
     }
 }
+    
