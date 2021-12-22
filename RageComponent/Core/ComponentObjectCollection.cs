@@ -24,6 +24,13 @@ namespace RageComponent.Core
         }
 
         /// <summary>
+        /// Gets <see cref="IComponentObject"/> at specified index.
+        /// </summary>
+        /// <param name="index">Index of the element.</param>
+        /// <returns>A <see cref="IComponentObject"/> at specified index.</returns>
+        public IComponentObject this[int index] => _componentObjects[index];
+
+        /// <summary>
         /// Adds a <see cref="IComponentObject"/> to the collection.
         /// </summary>
         /// <param name="componentObject"><see cref="IComponentObject"/> to add.</param>
@@ -53,6 +60,26 @@ namespace RageComponent.Core
         public void Remove(int handle)
         {
             _componentObjects.RemoveAll(x => x.Handle == handle);
+        }
+
+        /// <summary>
+        /// Clears the collection.
+        /// </summary>
+        public void Clear()
+        {
+            _componentObjects.Clear();
+        }
+
+        /// <summary>
+        /// Disposes all the objects and clears the collection.
+        /// </summary>
+        public void DisposeAllAndClear()
+        {
+            foreach(IComponentObject componentObject in this)
+            {
+                componentObject.Dispose();
+            }
+            Clear();
         }
 
         /// <summary>
