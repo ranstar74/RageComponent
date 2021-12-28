@@ -5,10 +5,6 @@ using System;
 namespace RageComponent
 {
     /// <summary>Defines a component that does some specific functionality.</summary>
-    /// <remarks><see cref="Start"/>, <see cref="Update"/>, <see cref="Dispose"/> and <see cref="Reload"/> 
-    /// could be overriden, but can't be called.
-    /// <para>It was made because without <see cref="ComponentCollection"/> some component functionality
-    /// won't be working properly.</para></remarks>
     public abstract class Component
     {
         /// <summary>Component collection the <see cref="Component"/> created in.</summary>
