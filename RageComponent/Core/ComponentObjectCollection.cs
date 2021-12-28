@@ -5,37 +5,26 @@ using System.Linq;
 
 namespace RageComponent.Core
 {
-    /// <summary>
-    /// Manages a collection of <see cref="T"/>.
-    /// <para>
-    /// Calls Update method for every component object.
-    /// </para>
-    /// </summary>
+    /// <summary>Manages a collection of <typeparamref name="T"/>.
+    /// <para>Calls Update method for every component object.</para></summary>
+    /// <typeparam name="T">Type of the class, delivered from <see cref="IComponentObject"/>.</typeparam>
     public class ComponentObjectCollection<T> : IEnumerable<T> where T : IComponentObject
     {
-        /// <summary>
-        /// List of all component objects.
-        /// </summary>
+        /// <summary>List of all component objects.</summary>
         protected readonly List<T> ComponentObjects = new List<T>();
 
-        /// <summary>
-        /// Creates a new instance of <see cref="ComponentObjectCollection{T}"/>.
-        /// </summary>
+        /// <summary>Creates a new instance of <see cref="ComponentObjectCollection{T}"/>.</summary>
         public ComponentObjectCollection()
         {
             Main.OnTick += Update;
         }
 
-        /// <summary>
-        /// Gets object at specified index.
-        /// </summary>
+        /// <summary>Gets object at specified index.</summary>
         /// <param name="index">Index of the element.</param>
         /// <returns>An object at specified index.</returns>
         public T this[int index] => ComponentObjects[index];
 
-        /// <summary>
-        /// Adds an object to the collection.
-        /// </summary>
+        /// <summary>Adds an object to the collection.</summary>
         /// <param name="componentObject">Object to add.</param>
         public T Add(T componentObject)
         {
@@ -46,9 +35,7 @@ namespace RageComponent.Core
             return componentObject;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether collection contains an object with given handle or not.
-        /// </summary>
+        /// <summary>Gets a value indicating whether collection contains an object with given handle or not.</summary>
         /// <param name="handle">Handle to check.</param>
         /// <returns>True if collection contains given object with given handle, otherwise False.</returns>
         public bool Contains(int handle)
@@ -56,26 +43,20 @@ namespace RageComponent.Core
             return ComponentObjects.Any(x => x.Handle == handle);
         }
 
-        /// <summary>
-        /// Removes a component object from the collection by handle.
-        /// </summary>
+        /// <summary>Removes a component object from the collection by handle.</summary>
         /// <param name="handle">Handle of component object to remove.</param>
         public void Remove(int handle)
         {
             ComponentObjects.RemoveAll(x => x.Handle == handle);
         }
 
-        /// <summary>
-        /// Clears the collection.
-        /// </summary>
+        /// <summary>Clears the collection.</summary>
         public void Clear()
         {
             ComponentObjects.Clear();
         }
 
-        /// <summary>
-        /// Disposes all the objects and clears the collection.
-        /// </summary>
+        /// <summary>Disposes all the objects and clears the collection.</summary>
         public void DisposeAllAndClear()
         {
             foreach(T componentObject in this)
@@ -85,9 +66,7 @@ namespace RageComponent.Core
             Clear();
         }
 
-        /// <summary>
-        /// Gets a component by given handle.
-        /// </summary>
+        /// <summary>Gets a component by given handle.</summary>
         /// <param name="handle">Handle to look for.</param>
         /// <returns>Component if found, otherwise null.</returns>
         public T GetByHandle(int handle)
@@ -100,9 +79,7 @@ namespace RageComponent.Core
             return components.FirstOrDefault();
         }
 
-        /// <summary>
-        /// Calls <see cref="ComponentCollection.OnUpdate"/> for every component of the <see cref="T"/>.
-        /// </summary>
+        /// <summary>Calls <see cref="ComponentCollection.OnUpdate"/> for every component of the <typeparamref name="T"/>.</summary>
         public void Update()
         {
             foreach (T componentObject in ComponentObjects)
@@ -111,9 +88,7 @@ namespace RageComponent.Core
             }
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
+        /// <summary><inheritdoc/></summary>
         /// <returns><inheritdoc/></returns>
         public IEnumerator<T> GetEnumerator()
         {
@@ -126,17 +101,11 @@ namespace RageComponent.Core
         }
     }
 
-    /// <summary>
-    /// Manages a collection of <see cref="IComponentObject"/>
-    /// <para>
-    /// Calls Update method for every component object.
-    /// </para>
-    /// </summary>
+    /// <summary>Manages a collection of <see cref="IComponentObject"/>
+    /// <para>Calls Update method for every component object.</para></summary>
     public class ComponentObjectCollection : ComponentObjectCollection<IComponentObject>
     {
-        /// <summary>
-        /// Adds an object to the collection.
-        /// </summary>
+        /// <summary>Adds an object to the collection.</summary>
         /// <param name="componentObject">Object to add.</param>
         public T2 Add<T2>(T2 componentObject) where T2 : IComponentObject
         {
@@ -147,9 +116,7 @@ namespace RageComponent.Core
             return componentObject;
         }
 
-        /// <summary>
-        /// Gets a component by given handle.
-        /// </summary>
+        /// <summary>Gets a component by given handle.</summary>
         /// <param name="handle">Handle to look for.</param>
         /// <returns>Component if found, otherwise null.</returns>
         public T2 GetByHandle<T2>(int handle) where T2 : IComponentObject
