@@ -59,10 +59,22 @@ namespace RageComponent
 
         }
 
+        /// <summary>Called before <see cref="Update"/>.</summary>
+        public virtual void EarlyUpdate()
+        {
+
+        }
+
         /// <summary>Called every frame.</summary>
         public virtual void Update()
         {
             
+        }
+
+        /// <summary>Called after <see cref="Update"/>.</summary>
+        public virtual void LateUpdate()
+        {
+
         }
 
         /// <summary>Called when <see cref="IComponentObject"/> being disposed.

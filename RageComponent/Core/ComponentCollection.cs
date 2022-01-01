@@ -89,29 +89,54 @@ namespace RageComponent.Core
         /// <summary>Calls <see cref="Component.Update"/> for every component.</summary>
         public void OnUpdate()
         {
-            for(int i = 0; i < components.Count; i++)
+            // EarlyUpdate, Update, LateUpdate
+            for(int updateStep = 0; updateStep < 3; updateStep++)
             {
-                var component = components[i];
-
-                if (!component.IsEnabled)
-                    continue;
-
-                if (Game.GameTime < component.NextUpdateTime)
-                    continue;
-
-                if (component.YieldTicks == 0)
+                for (int i = 0; i < components.Count; i++)
                 {
-                    component.Update();
-                }
-                else
-                {
-                    component.YieldTicks--;
-                }
+                    var component = components[i];
 
-                if (component.UpdateTime != -1)
-                    component.NextUpdateTime = Game.GameTime + component.UpdateTime;
-                else
-                    component.NextUpdateTime = 0;
+                    if (!component.IsEnabled)
+                        continue;
+
+                    if (Game.GameTime < component.NextUpdateTime)
+                        continue;
+
+                    if (component.YieldTicks == 0)
+                    {
+                        switch(updateStep)
+                        {
+                            case 0:
+                                {
+                                    component.EarlyUpdate();
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    component.Update();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    component.LateUpdate();
+                                    break;
+                                }
+                        }
+                    }
+                    else
+                    {
+                        // Count only Update
+                        if(updateStep == 1)
+                        {
+                            component.YieldTicks--;
+                        }
+                    }
+
+                    if (component.UpdateTime != -1)
+                        component.NextUpdateTime = Game.GameTime + component.UpdateTime;
+                    else
+                        component.NextUpdateTime = 0;
+                }
             }
         }
 
